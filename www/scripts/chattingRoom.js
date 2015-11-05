@@ -7,6 +7,11 @@ function window_onload(){
 	tbxUsername.select();
 }
 
+function window_onunload(){
+	socket.emit('logout',userName);
+	socket.disconnect();
+}
+
 function btnSend_onclick(){
 	var msg = tbxMsg.value;
 	if(msg.length > 0 ){
@@ -26,11 +31,6 @@ function btnLogout_onclick(){
 	document.getElementById('btnSend').disabled = 'disabled';
 	document.getElementById('btnLogout').disabled = 'disabled';
 	document.getElementById('btnLogin').disabled = '';
-}
-
-function window_onunload(){
-	socket.emit('logout',userName);
-	socket.disconnect();
 }
 
 function AddMsg(msg){
