@@ -7,6 +7,32 @@ function window_onload(){
 	tbxUsername.select();
 }
 
+function btnSend_onclick(){
+	var msg = tbxMsg.value;
+	if(msg.length > 0 ){
+		socket.emit('chat',{user:userName,msg:msg});
+		tbxMsg.value = "";
+	}
+}
+
+function btnLogout_onclick(){
+	socket.emit('logout',userName);
+	socket.disconnect();
+	socket.removeAllListeners('connect');
+	io.sockets = {};
+	AddMsg('用户'+userName+'退出聊天室！');
+	var divRight = document.getElementById('divRight');
+	divRight.innerHTML = '用户列表';
+	document.getElementById('btnSend').disabled = 'disabled';
+	document.getElementById('btnLogout').disabled = 'disabled';
+	document.getElementById('btnLogin').disabled = '';
+}
+
+function window_onunload(){
+	socket.emit('logout',userName);
+	socket.disconnect();
+}
+
 function AddMsg(msg){
 	divChat.innerHTML += msg + '<br>';
 	if(divChat.scrollHeight > divChat.clientHeight){
@@ -68,34 +94,8 @@ function btnLogin_onclick(){
 		socket.removeAllListeners('connect');
 		io.sockets = {};
 	});
-	sockets.emit('login',userName);
+	socket.emit('login',userName);
 	document.getElementById('btnSend').disabled = '';
 	document.getElementById('btnLogout').disabled = '';
-	document.getElementById('brnLogin').disabled = true;
-}
-
-function btnSend_onclick(){
-	var msg = tbxMsg.value;
-	if(msg.length > 0 ){
-		socket.emit('chat',{user:userName,msg:msg});
-		tbxMsg.value = "";
-	}
-}
-
-function btnLogout_onclick(){
-	socket.emit('logout',userName);
-	socket.disconnect();
-	socket.removeAllListeners('connect');
-	io.sockets = {}:
-	AddMsg('用户'+userName+'退出聊天室！');
-	var divRight = document.getElementById('divRight');
-	divRight.innerHTML = '用户列表';
-	document.getElementById('btnSend').disabled = 'disabled';
-	document.getElementById('btnLogout').disabled = 'disabled';
-	document.getElementById('btnLogin').disabled = '';
-}
-
-function window_onunload(){
-	socket.emit('logout',userName);
-	socket.disconnect();
+	document.getElementById('btnLogin').disabled = true;
 }
