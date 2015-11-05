@@ -87,6 +87,26 @@ function btnLogin_onclick(){
 			document.getElementById('btnLogin').disabled = "";
 		});
 	});
+	// 加按enter键发送 未完全实现
+	document.getElementById('tbxUsername').addEventListener('keyup',function(e){
+		if(e.keyCode == 13){
+			var tbxusername = document.getElementById('tbxUsername').value;
+			if(tbxusername.trim().length != 0){
+				socket.emit('login',tbxusername);
+			};
+		};
+	},false);
+	// 加按enter键发送  未完全实现
+	document.getElementById('tbxMsg').addEventListener('keyup',function(e){
+		if(e.keyup == 13){
+			var tbxmsg = document.getElementById('tbxMsg').value;
+			if(tbxmsg.trim().length != 0){
+				socket.emit('chat',{user:userName,msg:msg});
+				tbxMsg.value = "";
+			}
+		}
+	});
+	
 
 	socket.on('error',function(err){
 		AddMsg('与聊天室服务器之间的连接发生错误！');
